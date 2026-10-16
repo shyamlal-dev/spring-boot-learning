@@ -1,0 +1,9 @@
+{
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Spring Boot Application",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}
