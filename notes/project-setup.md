@@ -940,4 +940,526 @@ Save a file using:
 Ctrl + S
 ```
 
-The Java code will be 
+The Java code will be formatted automatically when saved.
+
+---
+
+# 22. Fix Java File Looking Like Plain Text
+
+Check the language mode in the bottom-right corner of VS Code.
+
+It should display:
+
+```text
+Java
+```
+
+If it displays `Plain Text`:
+
+```text
+Click Plain Text
+→ Select Java
+```
+
+If colors, IntelliSense, or formatting still do not work, follow these steps.
+
+## Reload VS Code
+
+```text
+Ctrl + Shift + P
+→ Developer: Reload Window
+```
+
+## Clean Java Language Server
+
+```text
+Ctrl + Shift + P
+→ Java: Clean Java Language Server Workspace
+→ Restart and Delete
+```
+
+Wait for Java and Maven indexing to complete.
+
+## Switch to Standard Mode
+
+If the bottom status bar displays:
+
+```text
+Java: Lightweight Mode
+```
+
+Click it and select:
+
+```text
+Switch to Standard Mode
+```
+
+Finally, format the file:
+
+```text
+Shift + Alt + F
+```
+
+---
+
+# 23. Important VS Code Shortcuts
+
+## Open Command Palette
+
+```text
+Ctrl + Shift + P
+```
+
+Used for:
+
+- Reloading VS Code
+- Cleaning the Java Language Server
+- Rebuilding the Codespace container
+- Running VS Code commands
+
+## Open Extensions
+
+```text
+Ctrl + Shift + X
+```
+
+Used to install Java and Spring Boot extensions.
+
+## Open Settings
+
+```text
+Ctrl + ,
+```
+
+Used to configure Format on Save and editor settings.
+
+## Format Document
+
+```text
+Shift + Alt + F
+```
+
+Used to correct code indentation and spacing.
+
+## Save File
+
+```text
+Ctrl + S
+```
+
+Used to save the current file.
+
+## Stop Running Application
+
+```text
+Ctrl + C
+```
+
+Used inside the selected terminal to stop the running application.
+
+## Open Explorer
+
+```text
+Ctrl + Shift + E
+```
+
+Used to open the project files and folders.
+
+## Open or Hide Terminal
+
+```text
+Ctrl + `
+```
+
+The backtick key is normally located below the `Esc` key.
+
+---
+
+# 24. Git Workflow
+
+Return to the repository root:
+
+```bash
+cd /workspaces/spring-boot-learning
+```
+
+Verify the path:
+
+```bash
+pwd
+```
+
+Expected:
+
+```text
+/workspaces/spring-boot-learning
+```
+
+Check changes:
+
+```bash
+git status
+```
+
+## Meaning of `git status`
+
+It displays:
+
+- Modified files
+- New files
+- Deleted files
+- Staged files
+- Current branch
+
+Stage all changes:
+
+```bash
+git add .
+```
+
+## Meaning of `git add .`
+
+It adds all changes under the current directory to the Git staging area.
+
+Commit:
+
+```bash
+git commit -m "feat: add first Spring Boot application"
+```
+
+## Meaning of `git commit -m`
+
+```text
+commit = Save staged changes in Git history
+-m = Add the commit message directly
+```
+
+Push:
+
+```bash
+git push
+```
+
+## Meaning of `git push`
+
+It uploads local Git commits to the remote GitHub repository.
+
+Stopping the Spring Boot application before committing is not compulsory.
+
+---
+
+# 25. Useful Commit Messages
+
+```bash
+git commit -m "chore: add Spring Boot learning structure"
+```
+
+```bash
+git commit -m "feat: add first Spring Boot application"
+```
+
+```bash
+git commit -m "feat: add hello REST endpoints"
+```
+
+```bash
+git commit -m "chore: add Codespaces port configuration"
+```
+
+```bash
+git commit -m "docs: add project setup notes"
+```
+
+```bash
+git commit -m "chore: remove unnecessary gitkeep file"
+```
+
+Commit prefixes:
+
+```text
+feat = New feature
+fix = Bug fix
+docs = Documentation change
+test = Testing-related change
+refactor = Code restructuring
+chore = Configuration or maintenance change
+```
+
+---
+
+# 26. Common Problems and Solutions
+
+## No such file or directory
+
+Incorrect:
+
+```bash
+cd /01-first-spring-boot-app/hello-spring-boot
+```
+
+Correct relative path from repository root:
+
+```bash
+cd 01-first-spring-boot-app/hello-spring-boot
+```
+
+Correct absolute path:
+
+```bash
+cd /workspaces/spring-boot-learning/01-first-spring-boot-app/hello-spring-boot
+```
+
+## Maven Wrapper permission denied
+
+Run:
+
+```bash
+chmod +x mvnw
+```
+
+Then:
+
+```bash
+./mvnw spring-boot:run
+```
+
+## Browser shows 404
+
+If the application has started but the browser shows `404`, the requested endpoint is not defined.
+
+Add an endpoint:
+
+```java
+@GetMapping("/")
+public String home() {
+    return "Application is running";
+}
+```
+
+## Port 8080 is already in use
+
+Stop the currently running application:
+
+```text
+Ctrl + C
+```
+
+Start the required application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+## Port is missing from the Ports panel
+
+Verify that the application is running:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Check:
+
+```text
+.devcontainer/devcontainer.json
+```
+
+Rebuild the Codespace:
+
+```text
+Ctrl + Shift + P
+→ Codespaces: Rebuild Container
+```
+
+## Java indentation is incorrect
+
+Use:
+
+```text
+Shift + Alt + F
+```
+
+Enable Format on Save:
+
+```text
+Ctrl + ,
+→ Search: Format On Save
+→ Enable
+```
+
+## Java code has limited colors or no IntelliSense
+
+Run:
+
+```text
+Ctrl + Shift + P
+→ Developer: Reload Window
+```
+
+Then:
+
+```text
+Ctrl + Shift + P
+→ Java: Clean Java Language Server Workspace
+→ Restart and Delete
+```
+
+Wait for Java and Maven indexing to finish.
+
+---
+
+# 27. Command Quick Reference
+
+## Show the current directory
+
+```bash
+pwd
+```
+
+## Return to the repository root
+
+```bash
+cd /workspaces/spring-boot-learning
+```
+
+## Open the first project using a relative path
+
+Run this from the repository root:
+
+```bash
+cd 01-first-spring-boot-app/hello-spring-boot
+```
+
+## Open the first project using an absolute path
+
+Run this from any location:
+
+```bash
+cd /workspaces/spring-boot-learning/01-first-spring-boot-app/hello-spring-boot
+```
+
+## List files
+
+```bash
+ls
+```
+
+## List hidden files with details
+
+```bash
+ls -la
+```
+
+## Run tests
+
+```bash
+./mvnw clean test
+```
+
+## Start the application
+
+```bash
+./mvnw spring-boot:run
+```
+
+## Test the root endpoint
+
+```bash
+curl http://localhost:8080
+```
+
+## Test the hello endpoint
+
+```bash
+curl http://localhost:8080/hello
+```
+
+## Remove a file
+
+```bash
+rm notes/.gitkeep
+```
+
+## Check Git changes
+
+```bash
+git status
+```
+
+## Stage all changes
+
+```bash
+git add .
+```
+
+## Commit changes
+
+```bash
+git commit -m "your commit message"
+```
+
+## Push changes
+
+```bash
+git push
+```
+
+---
+
+# 28. Final Repository Structure
+
+```text
+spring-boot-learning/
+│
+├── .devcontainer/
+│   └── devcontainer.json
+│
+├── 01-first-spring-boot-app/
+│   └── hello-spring-boot/
+│       ├── .mvn/
+│       ├── src/
+│       ├── mvnw
+│       ├── mvnw.cmd
+│       └── pom.xml
+│
+├── 02-rest-api/
+│   └── .gitkeep
+├── 03-layered-architecture/
+│   └── .gitkeep
+├── 04-spring-data-jpa/
+│   └── .gitkeep
+├── 05-validation-exception/
+│   └── .gitkeep
+├── 06-testing/
+│   └── .gitkeep
+├── 07-spring-security/
+│   └── .gitkeep
+├── notes/
+│   └── setup.md
+├── .gitignore
+└── README.md
+```
+
+---
+
+# 29. Final Checklist
+
+```text
+GitHub repository created
+Java .gitignore selected
+Codespace created
+Learning folders created
+Spring Initializr project generated
+Project ZIP uploaded and extracted
+Java and Maven verified
+Spring Web dependency added
+Application tests passed
+Spring Boot application started
+REST endpoints tested using curl
+Port 8080 forwarded
+Application opened in the browser
+Java extensions installed
+Java formatting configured
+.devcontainer committed
+Source code and notes pushed to GitHub
+```
