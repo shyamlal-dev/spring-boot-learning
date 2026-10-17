@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController{
+public class HelloController {
 
     @GetMapping("/")
     public String home() {
@@ -12,7 +12,7 @@ public class HelloController{
     }
 
     @GetMapping("/hello")
-    public String hello(){
+    public String hello() {
         return "Hello Spring Boot!";
     }
 }
