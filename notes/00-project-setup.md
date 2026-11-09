@@ -1459,7 +1459,624 @@ REST endpoints tested using curl
 Port 8080 forwarded
 Application opened in the browser
 Java extensions installed
-Java formatting configured
+Java formatting configured# Spring Boot Project Setup Using GitHub Codespaces
+
+This guide documents the current setup for the **Student Management System** project, including project import, daily Maven workflow, Codespaces port forwarding, Postman access, and common fixes.
+
+---
+
+## 1. Current Repository Structure
+
+```text
+spring-boot-learning/
+├── .devcontainer/
+│   └── devcontainer.json
+├── notes/
+│   ├── 00-project-setup.md
+│   └── 01-spring-boot-basics.md
+├── projects/
+│   └── student-management-system/
+│       ├── .mvn/
+│       ├── src/
+│       ├── mvnw
+│       ├── mvnw.cmd
+│       └── pom.xml
+├── .gitignore
+└── README.md
+```
+
+### Important locations
+
+Repository root:
+
+```text
+/workspaces/spring-boot-learning
+```
+
+Spring Boot project directory:
+
+```text
+/workspaces/spring-boot-learning/projects/student-management-system
+```
+
+Use the repository root for Git commands and notes. Use the project directory for Maven and Spring Boot commands.
+
+---
+
+## 2. Import a Spring Initializr Project
+
+Upload the downloaded ZIP inside:
+
+```text
+projects/student-management-system/
+```
+
+Extract it:
+
+```bash
+unzip "student-management-system.zip"
+```
+
+The final project folder must directly contain:
+
+```text
+pom.xml
+mvnw
+mvnw.cmd
+.mvn/
+src/
+```
+
+Avoid this duplicate structure:
+
+```text
+student-management-system/student-management-system/
+```
+
+Delete the ZIP after successful extraction:
+
+```bash
+rm "student-management-system.zip"
+```
+
+Always verify the current location and files:
+
+```bash
+pwd
+ls -la
+```
+
+---
+
+## 3. Maven Wrapper
+
+Give the Maven Wrapper execute permission when required:
+
+```bash
+chmod +x mvnw
+```
+
+Meaning:
+
+- `chmod` changes file permissions.
+- `+x` adds execute permission.
+- `mvnw` is the Maven Wrapper included with the project.
+
+This is normally required only once.
+
+Verify Maven:
+
+```bash
+./mvnw -version
+```
+
+---
+
+## 4. Daily Development Workflow
+
+Open the project directory:
+
+```bash
+cd /workspaces/spring-boot-learning/projects/student-management-system
+```
+
+Confirm the location:
+
+```bash
+pwd
+```
+
+### Normal development
+
+Run the application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Expected logs:
+
+```text
+Tomcat started on port 8080
+Started StudentManagementSystemApplication
+```
+
+Stop the application with:
+
+```text
+Ctrl + C
+```
+
+### Run automated tests
+
+```bash
+./mvnw test
+```
+
+### Fresh test after a stale-build or build issue
+
+```bash
+./mvnw clean test
+```
+
+### Full verification before commit
+
+```bash
+./mvnw clean verify
+```
+
+### Daily command rule
+
+```text
+Normal coding and manual API testing  -> ./mvnw spring-boot:run
+Tests added or changed                -> ./mvnw test
+Stale build or unusual build issue    -> ./mvnw clean test
+Before an important commit            -> ./mvnw clean verify
+```
+
+Do not run `clean` after every small change because it deletes the `target/` directory and forces a full rebuild.
+
+---
+
+## 5. Test the Application Inside Codespaces
+
+Keep the application running in one terminal. Open another terminal and run:
+
+```bash
+curl http://localhost:8080
+```
+
+Example student endpoints:
+
+```bash
+curl http://localhost:8080/students
+curl http://localhost:8080/students/1
+```
+
+If `curl` returns the expected response, Spring Boot and port `8080` are working inside the Codespace, even if the Ports panel is empty.
+
+---
+
+## 6. Configure Port 8080
+
+Create or update:
+
+```text
+.devcontainer/devcontainer.json
+```
+
+Use:
+
+```json
+{
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Student Management System",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}
+```
+
+Configuration meaning:
+
+- `forwardPorts` asks Codespaces to forward port `8080`.
+- `label` is only the display name in the Ports panel.
+- `onAutoForward` controls what Codespaces does when the port becomes active.
+
+The label does not need to match:
+
+```properties
+spring.application.name=student-management-system
+```
+
+The Spring application name and the Codespaces port label are independent.
+
+After changing `devcontainer.json`:
+
+```text
+Ctrl + Shift + P
+-> Codespaces: Rebuild Container
+```
+
+A container rebuild does not automatically start Spring Boot. Start it again:
+
+```bash
+cd /workspaces/spring-boot-learning/projects/student-management-system
+./mvnw spring-boot:run
+```
+
+---
+
+## 7. Get the Codespaces Forwarded URL
+
+If the Ports panel remains empty but `curl` works, print the URL manually:
+
+```bash
+echo "https://${CODESPACE_NAME}-8080.app.github.dev"
+```
+
+Example format:
+
+```text
+https://<codespace-name>-8080.app.github.dev
+```
+
+Open the generated URL in the browser.
+
+### URL stability
+
+- The URL normally remains the same while using the same Codespace and port.
+- Stopping, starting, suspending, or resuming the same Codespace normally keeps the URL.
+- A newly created Codespace receives a different name, so its forwarded URL also changes.
+
+---
+
+## 8. Make the Port Accessible to Postman
+
+Codespaces ports are private by default. A browser may work because it has an authenticated GitHub session, while Postman may receive a GitHub authentication HTML page instead of the API response.
+
+Make port `8080` public:
+
+```bash
+gh codespace ports visibility 8080:public -c "$CODESPACE_NAME"
+```
+
+If GitHub CLI authentication is required:
+
+```bash
+gh auth login
+```
+
+Then run the visibility command again.
+
+After testing, make the port private:
+
+```bash
+gh codespace ports visibility 8080:private -c "$CODESPACE_NAME"
+```
+
+### Security note
+
+A public forwarded port can be accessed by anyone who has its URL. Do not expose secrets, production credentials, or sensitive data.
+
+---
+
+## 9. Postman Environment Setup
+
+Create a Postman environment named:
+
+```text
+Student Management System - Codespace
+```
+
+Add this variable:
+
+```text
+Variable: baseUrl
+Value: https://<codespace-name>-8080.app.github.dev
+```
+
+Do not add a trailing `/` to `baseUrl`.
+
+Select this environment from the Postman environment dropdown.
+
+Use these request URLs:
+
+```text
+POST   {{baseUrl}}/students
+GET    {{baseUrl}}/students
+GET    {{baseUrl}}/students/1
+PUT    {{baseUrl}}/students/1
+DELETE {{baseUrl}}/students/1
+```
+
+For POST and PUT requests:
+
+```text
+Body -> raw -> JSON
+Content-Type: application/json
+```
+
+Example body:
+
+```json
+{
+  "name": "Ram Kumar",
+  "email": "ramkumar@example.com",
+  "course": "Advanced Spring Boot"
+}
+```
+
+If a new Codespace is created, update only the `baseUrl` environment variable. Saved requests will continue to work.
+
+---
+
+## 10. Package Structure Rule
+
+Keep the main application class in the root package:
+
+```text
+com.sms.studentmanagement
+```
+
+Keep application layers under the same package:
+
+```text
+com.sms.studentmanagement.controller
+com.sms.studentmanagement.dto
+com.sms.studentmanagement.entity
+com.sms.studentmanagement.exception
+com.sms.studentmanagement.repository
+com.sms.studentmanagement.service
+```
+
+Recommended structure:
+
+```text
+com/sms/studentmanagement/
+├── StudentManagementSystemApplication.java
+├── controller/
+├── dto/
+├── entity/
+├── exception/
+├── repository/
+└── service/
+```
+
+Spring Boot component scanning starts from the package containing the main application class and scans its sub-packages.
+
+---
+
+## 11. Git Workflow
+
+Before Git operations, return to the repository root:
+
+```bash
+cd /workspaces/spring-boot-learning
+```
+
+Check changes:
+
+```bash
+git status
+```
+
+Before committing, verify the application:
+
+```bash
+cd projects/student-management-system
+./mvnw clean verify
+cd /workspaces/spring-boot-learning
+```
+
+Stage, commit, and push:
+
+```bash
+git add .
+git commit -m "docs: update Codespaces project setup"
+git push origin main
+```
+
+If local and remote branches have different commits:
+
+```bash
+git pull --rebase origin main
+git push origin main
+```
+
+Do not use `git push --force` unless the history rewrite is intentional and fully understood.
+
+Before deleting a Codespace, always commit and push important changes. Uncommitted changes can be permanently lost when the Codespace is deleted.
+
+---
+
+## 12. Common Problems and Fixes
+
+### `mvnw: No such file or directory`
+
+The terminal is in the wrong directory.
+
+```bash
+cd /workspaces/spring-boot-learning/projects/student-management-system
+```
+
+### Maven Wrapper permission denied
+
+```bash
+chmod +x mvnw
+```
+
+### Application starts but Ports panel is empty
+
+First verify the backend:
+
+```bash
+curl http://localhost:8080
+```
+
+Then print the forwarded URL:
+
+```bash
+echo "https://${CODESPACE_NAME}-8080.app.github.dev"
+```
+
+Also verify `devcontainer.json`, save it, and rebuild the container.
+
+### Rebuild completed but application is not running
+
+A rebuild stops running processes. Start Spring Boot again:
+
+```bash
+./mvnw spring-boot:run
+```
+
+### Browser works but Postman returns GitHub HTML
+
+The forwarded port is private. Make it public temporarily:
+
+```bash
+gh codespace ports visibility 8080:public -c "$CODESPACE_NAME"
+```
+
+### Postman returns `404 Not Found`
+
+Verify the controller path. For student APIs, use the complete endpoint:
+
+```text
+{{baseUrl}}/students
+```
+
+### Postman returns `405 Method Not Allowed`
+
+Verify the HTTP method, such as `GET`, `POST`, `PUT`, or `DELETE`.
+
+### Postman returns `400 Bad Request`
+
+Verify:
+
+- JSON syntax
+- DTO field names
+- Required fields
+- Validation rules
+- `Content-Type: application/json`
+
+### Port 8080 is already in use
+
+Stop the old application using `Ctrl + C`, or find the process:
+
+```bash
+lsof -i :8080
+```
+
+### Accidental package move appears as deleted and untracked files
+
+Inspect first:
+
+```bash
+git status
+```
+
+If the move was accidental and no intentional changes must be preserved:
+
+```bash
+git restore .
+```
+
+Preview untracked deletion before removing anything:
+
+```bash
+git clean -fdn
+```
+
+Use `git clean -fd` only after carefully reviewing the preview.
+
+---
+
+## 13. Quick Command Reference
+
+```bash
+# Repository root
+cd /workspaces/spring-boot-learning
+
+# Project directory
+cd /workspaces/spring-boot-learning/projects/student-management-system
+
+# Current directory
+pwd
+
+# List all files
+ls -la
+
+# Maven Wrapper permission
+chmod +x mvnw
+
+# Run tests
+./mvnw test
+
+# Fresh test
+./mvnw clean test
+
+# Full verification
+./mvnw clean verify
+
+# Run application
+./mvnw spring-boot:run
+
+# Test locally inside Codespaces
+curl http://localhost:8080
+curl http://localhost:8080/students
+
+# Print forwarded URL
+echo "https://${CODESPACE_NAME}-8080.app.github.dev"
+
+# Make port public for Postman
+gh codespace ports visibility 8080:public -c "$CODESPACE_NAME"
+
+# Make port private again
+gh codespace ports visibility 8080:private -c "$CODESPACE_NAME"
+
+# Git workflow
+git status
+git add .
+git commit -m "docs: update Codespaces project setup"
+git push origin main
+```
+
+---
+
+## 14. Final Checklist
+
+```text
+Student Management System project is in the correct directory
+pom.xml and mvnw are directly inside the project folder
+Maven Wrapper is executable
+Tests pass
+Application starts on port 8080
+localhost endpoint works through curl
+.devcontainer forwards port 8080
+Forwarded Codespaces URL opens in the browser
+Port is public only when external Postman access is needed
+Postman uses the baseUrl environment variable
+All REST endpoints are tested
+Important changes are committed and pushed
+```
+
+---
+
+## Summary
+
+- Run Maven commands from `projects/student-management-system`.
+- Use `./mvnw spring-boot:run` for normal development.
+- Use `curl http://localhost:8080` to confirm the application is running.
+- Use `devcontainer.json` to configure port `8080`.
+- Rebuild the container after changing dev-container configuration.
+- Use the Codespaces forwarded HTTPS URL outside the container.
+- Temporarily make port `8080` public for Postman, then make it private again.
+- Store the forwarded URL in Postman's `baseUrl` environment variable.
+- A new Codespace creates a new forwarded URL.
+
 .devcontainer committed
 Source code and notes pushed to GitHub
 ```
