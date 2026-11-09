@@ -1,4 +1,4 @@
-package com.sms.studentmanagementsystem.entity;
+package com.sms.studentmanagement.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

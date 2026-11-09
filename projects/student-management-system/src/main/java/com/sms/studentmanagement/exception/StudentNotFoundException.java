@@ -1,4 +1,4 @@
-package com.sms.studentmanagementsystem.exception;
+package com.sms.studentmanagement.exception;
 
 public class StudentNotFoundException extends RuntimeException{
     public StudentNotFoundException(Long id){

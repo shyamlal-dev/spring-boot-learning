@@ -1,13 +1,13 @@
-package com.sms.studentmanagementsystem.service;
+package com.sms.studentmanagement.service;
 
 import org.springframework.stereotype.Service;
-import com.sms.studentmanagementsystem.repository.StudentRepository;
-import com.sms.studentmanagementsystem.entity.Student;
-import com.sms.studentmanagementsystem.exception.StudentNotFoundException;
-import com.sms.studentmanagementsystem.dto.CreateStudentRequest;
-import com.sms.studentmanagementsystem.exception.DuplicateEmailException;
-import com.sms.studentmanagementsystem.dto.StudentResponse;
-import com.sms.studentmanagementsystem.dto.UpdateStudentRequest;
+import com.sms.studentmanagement.repository.StudentRepository;
+import com.sms.studentmanagement.entity.Student;
+import com.sms.studentmanagement.exception.StudentNotFoundException;
+import com.sms.studentmanagement.dto.CreateStudentRequest;
+import com.sms.studentmanagement.exception.DuplicateEmailException;
+import com.sms.studentmanagement.dto.StudentResponse;
+import com.sms.studentmanagement.dto.UpdateStudentRequest;
 import java.util.List;
 
 @Service

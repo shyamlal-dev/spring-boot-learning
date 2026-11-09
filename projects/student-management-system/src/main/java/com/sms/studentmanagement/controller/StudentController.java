@@ -1,4 +1,4 @@
-package com.sms.studentmanagementsystem.controller;
+package com.sms.studentmanagement.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
-import com.sms.studentmanagementsystem.dto.CreateStudentRequest;
-import com.sms.studentmanagementsystem.service.StudentService;
-import com.sms.studentmanagementsystem.dto.StudentResponse;
-import com.sms.studentmanagementsystem.dto.UpdateStudentRequest;
+import com.sms.studentmanagement.dto.CreateStudentRequest;
+import com.sms.studentmanagement.service.StudentService;
+import com.sms.studentmanagement.dto.StudentResponse;
+import com.sms.studentmanagement.dto.UpdateStudentRequest;
 import java.util.List;
 
 

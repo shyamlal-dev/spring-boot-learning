@@ -1,4 +1,4 @@
-package com.sms.studentmanagementsystem.exception;
+package com.sms.studentmanagement.exception;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

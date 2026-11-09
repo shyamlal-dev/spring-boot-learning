@@ -1,4 +1,4 @@
-package com.sms.studentmanagementsystem.dto;
+package com.sms.studentmanagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
