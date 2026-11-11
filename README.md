@@ -25,11 +25,12 @@ A full-stack, production-ready application for managing student records.
 - Maven
 - Frontend (Planned)
 
-### Project Structure
+## Project Structure
 
 ```text
 projects/
 └── student-management-system/
+```
 
 ## Project Status
 
