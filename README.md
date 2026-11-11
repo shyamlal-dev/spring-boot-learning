@@ -30,3 +30,8 @@ A full-stack, production-ready application for managing student records.
 ```text
 projects/
 └── student-management-system/
+
+## Project Status
+
+🚧 Development in progress
+
